@@ -4,7 +4,7 @@
   "description": "TEchnical Test FullStack Seakun",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron src/"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/sunarto20/seakun/issues"
   },
-  "homepage": "https://github.com/sunarto20/seakun#readme"
+  "homepage": "https://github.com/sunarto20/seakun#readme",
+  "devDependencies": {
+    "electron": "^31.1.0"
+  }
 }
