@@ -1,0 +1,19 @@
+{
+  "name": "seakun",
+  "version": "1.0.0",
+  "description": "TEchnical Test FullStack Seakun",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sunarto20/seakun.git"
+  },
+  "author": "Sunarto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sunarto20/seakun/issues"
+  },
+  "homepage": "https://github.com/sunarto20/seakun#readme"
+}
