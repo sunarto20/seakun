@@ -18,5 +18,8 @@
   "homepage": "https://github.com/sunarto20/seakun#readme",
   "devDependencies": {
     "electron": "^31.1.0"
+  },
+  "dependencies": {
+    "puppeteer": "^22.12.1"
   }
 }
