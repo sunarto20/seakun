@@ -1,3 +1,5 @@
+const ipcRender = require("electron").ipcRenderer;
+
 const fields = {
   email: null,
   password: null,
@@ -12,6 +14,10 @@ button.addEventListener("click", function () {
   if (fields.email === "" || fields.password === "") {
     alert("email and password cannot be blank");
   } else {
-    alert("ok");
+    ipcRender.send("start", fields);
   }
+});
+
+ipcRender.on("on start", (event, args) => {
+  console.log(args);
 });

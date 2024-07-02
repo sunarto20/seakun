@@ -1,18 +1,18 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
+const { default: puppeteer } = require("puppeteer");
 
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
+    // webPreferences: {},
     width: 800,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
@@ -20,16 +20,14 @@ const createWindow = () => {
   mainWindow.webContents.openDevTools();
   mainWindow.loadFile("index.html");
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  ipcMain.on("start", (event, args) => {
+    tiktokPage(args);
+    event.sender.send("on start", "Application Running");
+  });
 };
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
   app.on("activate", () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -37,12 +35,42 @@ app.whenReady().then(() => {
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+const tiktokPage = async (fields) => {
+  const loginPage = "https://www.tiktok.com/login/phone-or-email/email";
+  const inputForm = ".etcs7ny1";
+  const inputFormPassword =
+    "#loginContainer > div.tiktok-aa97el-DivLoginContainer.exd0a430 > form > div.tiktok-15iauzg-DivContainer.e1bi0g3c0 > div > input";
+  const buttonLogin = ".ehk74z00";
+
+  const browser = await puppeteer.launch({ headless: false });
+  const page = await browser.newPage();
+
+  await page.setViewport({ width: 1080, height: 1024 });
+  // Navigate the page to a URL.
+  await page.goto(loginPage, { timeout: 0 });
+  await page.type(inputForm, fields.email, { delay: 120 });
+  await page.type(inputFormPassword, fields.password, { delay: 120 });
+  await page.click(buttonLogin);
+
+  await page.waitForNavigation({
+    waitUntil: ["load", "networkidle0"],
+    timeout: 0,
+  });
+
+  let maxScreen = 10;
+
+  for (let index = 1; index <= maxScreen; index++) {
+    const likeButton = `#main-content-homepage_hot > div.e108hwin0 > div:nth-child(${index}) > div > div > div.ees02z00 > button:nth-child(2) > span`;
+    await page.waitForSelector(likeButton, { timeout: 0 });
+    await page.click(likeButton);
+    await page.keyboard.press("ArrowDown");
+
+    console.log(`Data tiktok ke ${index}`);
+  }
+
+  await browser.close();
+};
