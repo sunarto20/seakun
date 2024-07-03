@@ -1,4 +1,3 @@
-// Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("node:path");
 const { default: puppeteer } = require("puppeteer");
@@ -6,7 +5,6 @@ const { default: puppeteer } = require("puppeteer");
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    // webPreferences: {},
     width: 800,
     height: 600,
     webPreferences: {
@@ -17,7 +15,6 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  // mainWindow.webContents.openDevTools();
   mainWindow.loadFile("index.html");
 
   ipcMain.on("start", (event, args) => {
@@ -50,7 +47,6 @@ const tiktokPage = async (fields) => {
   const page = await browser.newPage();
 
   await page.setViewport({ width: 1080, height: 1024 });
-  // Navigate the page to a URL.
   await page.goto(loginPage, { timeout: 0 });
   await page.type(inputForm, fields.email, { delay: 120 });
   await page.type(inputFormPassword, fields.password, { delay: 120 });
