@@ -17,7 +17,7 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.loadFile("index.html");
 
   ipcMain.on("start", (event, args) => {
